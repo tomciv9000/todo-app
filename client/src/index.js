@@ -92,6 +92,7 @@ class ToDoApp extends React.Component{
   constructor(props){
     super(props)
     this.state = {
+      isLoaded: false,
       tasks: []
     }
   }
@@ -102,10 +103,10 @@ class ToDoApp extends React.Component{
       .then(
         (result) => {
           console.log(result)
-          //this.setState({
-          //  isLoaded: true,
-          //  items: result.items
-          //});
+          this.setState({
+            isLoaded: true,
+            tasks: result
+          });
         },
         // Note: it's important to handle errors here
         // instead of a catch() block so that we don't swallow
