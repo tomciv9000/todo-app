@@ -92,6 +92,7 @@ class ToDoApp extends React.Component{
   constructor(props){
     super(props)
     this.state = {
+      error: null,
       isLoaded: false,
       tasks: []
     }
@@ -121,12 +122,25 @@ class ToDoApp extends React.Component{
   }
   
   onTaskSubmit = (taskObj) => {
-    let tasks = [...this.state.tasks, taskObj]
-    console.log(tasks)
-    this.setState({
-      tasks: tasks
-    });
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(taskObj)
+    };
+    fetch(BASE_URL, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+    })
+    //let tasks = [...this.state.tasks, taskObj]
+    //console.log(tasks)
+    //this.setState({
+    //  tasks: tasks
+    //});
   }
+
+
+
 
   onDelete = (index) => {
     const arrCopy = [...this.state.tasks];
@@ -135,20 +149,27 @@ class ToDoApp extends React.Component{
 }
   
   render() {
-    const list = this.state.tasks
+    
+    const { error, isLoaded, tasks } = this.state;
+    if (error) {
+      return <div>Error: {error.message}</div>;
+    } else if (!isLoaded) {
+      return <div>Loading...</div>;
+    } else {
+    
     return (
       <div className="wrapper">
         <Card bg="info" style={{ width: '30rem' }}>
         
         
-          <Header itemCount={list.length}/>
+          <Header itemCount={tasks.length}/>
           <InputField onTaskSubmit={this.onTaskSubmit}/>
-          <TaskList onDelete={this.onDelete} tasks={list}/>
+          <TaskList onDelete={this.onDelete} tasks={tasks}/>
         
         </Card>
       </div>
     )
-  }  
+  }  }
 }
 
 
