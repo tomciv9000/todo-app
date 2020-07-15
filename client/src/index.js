@@ -8,13 +8,6 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-//const sampleList = [
-//  {description: "Wash the car", complete:false},
-//  {description: "Feed the cat", complete:false},
-//  {description: "Order pizza for the bois", complete:false},
-//  {description: "Cancel plans with the bois", complete:false},
-//]
-
 const BASE_URL = "http://localhost:3000/items"
 
 const Header = (props) => {
@@ -45,15 +38,13 @@ const InputField = (props) => {
     <Form  onSubmit={handleSubmit}>
       <Form.Row className="align-items-center">
       <Col sm={10} >
-      
-        
         <Form.Control 
               size="large"
               placeholder="Enter a new task description"
               type="text"
               value={description}
               onChange={e => setDescription(e.target.value)}
-            />
+        />
       </Col>
       <Col >
         <Button disabled={!validateTask()} type="submit">Add!</Button>
@@ -67,8 +58,8 @@ const TaskList = (props) => {
   let tasks = props.tasks
   return (
       <ul >
-          {tasks.map((item, index) => {
-            return <Task key={index} id={index} task={item} onDelete={props.onDelete}/>
+          {tasks.map((item) => {
+            return <Task key={item.id} task={item} onDelete={props.onDelete}/>
           })}
         </ul>
   )
@@ -80,7 +71,7 @@ const Task = (props) => {
   return (
     <div>
     <li>{task.description + "        "}
-    <Button variant="danger" size="sm" onClick={()=> props.onDelete(props.id)}>x</Button><br/>
+    <Button variant="danger" size="sm" onClick={()=> props.onDelete(task.id)}>X</Button><br/>
    
     </li>
     </div>
@@ -145,12 +136,27 @@ class ToDoApp extends React.Component{
 
 
 
-  onDelete = (index) => {
-    const arrCopy = [...this.state.tasks];
-    arrCopy.splice(index, 1);
-    this.setState({tasks: arrCopy});
-}
-  
+  onDelete = (taskID) => {
+    const tasks = this.state.tasks
+    const deleteOptions = {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    };
+    fetch(`${BASE_URL}/${taskID}`, deleteOptions)
+    .then((response) => {
+      response.ok ? console.log('removed') : console.log("you fucked up")
+      
+      let result = tasks.filter(task => task.id !== taskID)
+      this.setState({
+        tasks: result
+      })
+      
+    })
+    .catch(error => {
+      console.log(error)
+    })
+  }
+
   render() {
     
     const { error, isLoaded, tasks } = this.state;
