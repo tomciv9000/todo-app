@@ -15,7 +15,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 //  {description: "Cancel plans with the bois", complete:false},
 //]
 
-const BASE_URL = "http://localhost:3000/api"
+const BASE_URL = "http://localhost:3000/items"
 
 const Header = (props) => {
   let count = props.itemCount
@@ -61,25 +61,17 @@ const InputField = (props) => {
       </Col>
       </Form.Row>
     </Form>
-
-
-
-
-
-
   )
 }
 
 const TaskList = (props) => {
   let tasks = props.tasks
   return (
-    
       <ul >
           {tasks.map((item, index) => {
             return <Task key={index} id={index} task={item} onDelete={props.onDelete}/>
           })}
         </ul>
-    
   )
 }
 
@@ -105,14 +97,15 @@ class ToDoApp extends React.Component{
   }
 
   componentDidMount() {
-    fetch("https://api.example.com/items")
+    fetch(BASE_URL)
       .then(res => res.json())
       .then(
         (result) => {
-          this.setState({
-            isLoaded: true,
-            items: result.items
-          });
+          console.log(result)
+          //this.setState({
+          //  isLoaded: true,
+          //  items: result.items
+          //});
         },
         // Note: it's important to handle errors here
         // instead of a catch() block so that we don't swallow
