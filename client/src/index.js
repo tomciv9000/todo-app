@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import Card from 'react-bootstrap/Card'
-
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -19,11 +18,11 @@ const Header = (props) => {
 
 const InputField = (props) => {
   const [description, setDescription] = useState("")
-
+  
   const validateTask = () => {
     return description.length > 0 
   }
-
+  
   const handleSubmit = event => {
     event.preventDefault()
     let taskObj = {
@@ -67,13 +66,11 @@ const TaskList = (props) => {
 
 const Task = (props) => {
   let task = props.task
-  
   return (
     <div>
-    <li>{task.description + "        "}
-    <Button variant="danger" size="sm" onClick={()=> props.onDelete(task.id)}>X</Button><br/>
-   
-    </li>
+      <li>{task.description + "        "}
+        <Button variant="danger" size="sm" onClick={()=> props.onDelete(task.id)}>X</Button><br/>
+      </li>
     </div>
   )
 }
@@ -99,9 +96,6 @@ class ToDoApp extends React.Component{
             tasks: result
           });
         },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
         (error) => {
           this.setState({
             isLoaded: true,
