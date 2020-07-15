@@ -37,7 +37,6 @@ const InputField = (props) => {
         description: description,
         complete: false
     }
-    console.log(taskObj)
     props.onTaskSubmit(taskObj)
     setDescription("")
   }
@@ -130,13 +129,17 @@ class ToDoApp extends React.Component{
     fetch(BASE_URL, requestOptions)
     .then(response => response.json())
     .then(data => {
-      console.log(data)
+      let task = {
+        description: data.description,
+        complete: data.complete,
+        id: data.id
+      }
+      let tasks = [...this.state.tasks, task];
+      this.setState({
+        tasks:tasks
+      })
     })
-    //let tasks = [...this.state.tasks, taskObj]
-    //console.log(tasks)
-    //this.setState({
-    //  tasks: tasks
-    //});
+
   }
 
 
